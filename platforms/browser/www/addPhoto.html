@@ -1,0 +1,38 @@
+<div class="tabs-content">
+            <div class="tab-panel" id="tab_support">
+                <div class="tab-panel-group">
+                    <div class="tab-group-content">						
+                        
+                          <button class="fluent-big-button" onClick="load_checklist()">
+                            <span class="icon-clipboard fg-darkBlue"></span>
+                            <span class="button-label fg-darkBlue">Close</span>
+                        </button>					                       
+                  </div>                                                 
+                                      
+                </div>                
+            </div>                                                                
+        </div>
+        </br>
+        
+<form id="file-form" action="" method="POST" onsubmit="return false;">
+<input name="No" id="No" type="hidden"/>
+<input name="UserID" id="UserID" type="hidden" />
+<input name="reqDocid" id="reqDocid" type="hidden" />
+<input name="AuditID" id="AuditID" type="hidden" />
+<input name="MaxFileUploadSize" id="MaxFileUploadSize" type="hidden" />
+  <input name="CustomerID" id="CustomerID" type="hidden" />
+  <input name="AuditChecklistParameterID" id="AuditChecklistParameterID" type="hidden" />
+  
+  
+  Please choose a file:
+<input type="file" name="doc_file" id="doc_file"> 
+<span class="error"   style="color:#F00"><input id="description" name="description" type="text" />*</span> 
+  
+  <a href="#" onclick="submitfile1()" /> Upload </a>
+  
+  <progress id="progressbar" value="0" max="100" style="width:300px;display:none;" align="center"></progress>
+              </br>
+       <p id="loaded_n_totalId"></p>
+<h3 id="status"></h3>
+
+</form>

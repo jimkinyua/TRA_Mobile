@@ -1,0 +1,41 @@
+<legend>LOGIN</legend>
+<form method="post">
+    <fieldset>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="center" style="color:#F00">
+                    <div id="msg"></div>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="38%">
+                    <label>Username</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="uname" type="text" id="uname" placeholder="Type Username">
+                        <button class="btn-clear" tabindex="-1"></button>
+                    </div>
+                    <label>Password</label>
+                    <div class="input-control password" data-role="input-control">
+                        <input name="passwd" type="password" id="passwd" placeholder="Type Password" autofocus>
+                        <button class="btn-reveal" tabindex="-1"></button>
+                    </div>
+                    <div class="input-control checkbox" data-role="input-control">
+                        <label class="inline-block">
+                            <input type="checkbox" />
+                            <span class="check"></span> Remember Me
+                        </label>
+                    </div>
+                    <br>
+                    <input name="Button" type="button" id="submit" value="Login" onclick="login(this.form.uname.value,this.form.passwd.value)">
+                    <input type="reset" value="Cancel">
+                    <div style="margin-top: 20px"><a href="#" onclick="reset_password_page()">Forgot Password</a></div>
+                    <div style="margin-top: 20px"></div>
+                </td>
+                <td width="62%" valign="top">
+                    <div id="info" style="padding-left:20px"></div>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>

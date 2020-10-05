@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Capture Photo</title>
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+
+    // Wait for device API libraries to load
+    //
+    //document.addEventListener("deviceready",onDeviceReady,false);
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+    }
+
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoDataSuccess(imageData) {
+      // Uncomment to view the base64-encoded image data
+      // console.log(imageData);
+
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
+
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
+
+      // Show the captured photo
+      // The in-line CSS rules are used to resize the image
+      //
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+    }
+
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+      // Uncomment to view the image file URI
+      // console.log(imageURI);
+
+      // Get image handle
+      //
+      var largeImage = document.getElementById('largeImage');
+
+      // Unhide image elements
+      //
+      largeImage.style.display = 'block';
+
+      // Show the captured photo
+      // The in-line CSS rules are used to resize the image
+      //
+      largeImage.src = imageURI;
+    }
+
+    // A button will call this function
+    //
+    function capturePhoto() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+        destinationType: destinationType.DATA_URL });
+    }
+
+    // A button will call this function
+    //
+    function capturePhotoEdit() {
+      // Take picture using device camera, allow edit, and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
+        destinationType: destinationType.DATA_URL });
+    }
+
+    // A button will call this function
+    //
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
+
+    // Called if something bad happens.
+    //
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+
+    </script>   
+  </head>
+  <body>
+        <form  method="post" enctype="multipart/form-data"  id="myForm" accept-charset="utf-8">
+          <p>
+            <input name="No" id="No" type="hidden"/>
+            <br>
+  <input name="UserID" id="UserID" type="hidden" /><br>
+  <input name="reqDocid" id="reqDocid" type="hidden" /><br>
+  <input name="AuditReportID" id="AuditReportID" type="hidden" /><br>
+  <input name="MaxFileUploadSize" id="MaxFileUploadSize" type="hidden" />
+  <input name="photoimage" id="photoimage" type="hidden" />
+  <input name="AuditChecklistResultID" id="AuditChecklistResultID" type="hidden" />
+  <input name="AuditChecklistParameterID" id="AuditChecklistParameterID" type="hidden" />
+   <input name="LicenceApplicationID" id="LicenceApplicationID" type="hidden" />
+  <input name="AuditID" id="AuditID" type="hidden" />
+  
+          </p>
+          <p><img src="images/noimage.png" width="600" height="375" id="doc_file" name="doc_file"><br>
+          </p>
+</form>
+    <p><button onclick="capturePhoto2();">Capture Photo</button> <br></p>
+   <!-- <button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br> -->
+    
+     
+     <input id="submit" type="button" onclick="load_photos_documents()" value="Done" name="Button">
+       
+  <progress id="progressbar" value="0" max="100" style="width:300px;display:none;" align="center"></progress>
+   </br>
+   <p id="loaded_n_totalId"></p>
+   <h3 id="status"></h3>
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+  </body>
+</html>

@@ -1,0 +1,20 @@
+  <div id="message" style="color:#F00"></div>
+
+  <label>Inspector's Final Verdict</label>      
+  <div class="input-control select">
+      <select name="verdict" id="verdict">
+          <option value="1">Approved</option>
+          <option value="2">Rejected</option>              
+      </select>
+  </div>
+	<label  style="color:#F00">(Please put the general comments of the facility, and a final verdict on it.)</label>
+  <div class="input-control textarea">
+    <textarea rows="10" cols="50" name="comments" id="comments" style="width:100%">
+    </textarea> 
+  </div>
+
+  <div>
+    <input name="Button" type="button" id="submit" value="Previous" onclick="load_checklist()"> 
+    <input name="Button" type="button" id="submit" value="Next" onclick="save_report()"> 
+    <input name="Button" type="button" id="submit" value="Cancel" onclick="load_applicants()">     
+  </div>

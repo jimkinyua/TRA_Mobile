@@ -1,0 +1,19 @@
+<form id="file-form" action="" method="POST" onsubmit="return false;">
+<input name="No" id="No" type="hidden"/><br>
+<input name="UserID" id="UserID" type="hidden" /><br>
+<input name="reqDocid" id="reqDocid" type="hidden" /><br>
+<input name="AuditID" id="AuditID" type="hidden" /><br>
+<input name="MaxFileUploadSize" id="MaxFileUploadSize" type="hidden" />
+<input name="CustomerID" id="CustomerID" type="hidden" />
+
+<br>
+  Please choose a file: <input type="file" name="doc_file" id="doc_file"> <span class="error"   style="color:#F00"><input id="description" name="description" type="text" />*</span> 
+  
+  <a href="#" onclick="submitfile2();"/> Upload </a>
+  
+  <progress id="progressbar" value="0" max="100" style="width:300px;display:none;" align="center"></progress>
+              </br>
+       <p id="loaded_n_totalId"></p>
+<h3 id="status"></h3>
+<input id="submit" type="button" onclick="load_photos_documents()" value="Cancel" name="Button"></input>
+</form>

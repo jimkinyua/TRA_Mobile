@@ -1,0 +1,11 @@
+{
+ "android": {
+     "release": {
+         "keystore":"kdbmobile.keystore",
+         "storePassword":"kdbmobile",
+         "alias":"kdbmobile",
+         "password":"kdbmobile",
+         "keystoreType":""
+       }
+   }
+}

@@ -1,0 +1,22 @@
+<form method="link" action="dualstream/index.html">
+<input value = 'apolloz' id="txt" name="stream1" placeholder="" required="required"    
+autofocus="autofocus" />
+<select id="mySelect" onchange="selectionchange();">
+    <option value="0" >0</option>
+    <option value="1" >1</option>
+    <option value="2" >2</option>
+    <option value="3" >3</option>
+    <option value="4" >4</option>
+    <option value="5" >5</option>
+    <option value="6" >6</option>
+</select>
+<input type="submit" class="button" value="Click to watch the stream" />
+</form>
+<script>
+function selectionchange()
+{
+    var e = document.getElementById("mySelect");
+    var str = e.options[e.selectedIndex].value;
+
+    document.getElementById('txt').value = str;
+}</script>

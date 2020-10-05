@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "KDBMobile",
+  "short_name": "KDBMobile",
+  "version": "com.attainke.kdbmobile",
+  "description": "A mobile Milk inspection application for the Kenya Dairy Board",
+  "author": "Attain Enterprise Solutions",
+  "icons": [],
+  "start_url": "index.html"
+}

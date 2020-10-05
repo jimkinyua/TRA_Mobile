@@ -1,0 +1,155 @@
+<legend><span id="name"></span></legend>
+    <form method="post">
+                <fieldset>
+              
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center" style="color:#F00"><div id="msg"></div></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="50%">                    
+                    <label>Name</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="CustomerName" type="text" id="CustomerName" placeholder="" readonly >
+                        
+                    </div>
+                   <label>Address</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="Address" type="text" id="Address" placeholder="" readonly >
+                        
+                    </div>
+                    
+                    <label>Address 2</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="Address2" type="text" id="Address2" placeholder="" readonly >
+                        
+                    </div>
+                    <label>Address 3</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="address3" type="text" id="address3" placeholder="" readonly >
+                        
+                    </div>
+                    
+                    <label>City</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="city" type="text" id="city" placeholder="" readonly >
+                        
+                    </div>
+                    
+                    <label>Country Region Code</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="countryregioncode" type="text" id="countryregioncode" placeholder="" readonly >
+                        
+                    </div>
+                    <label>Post Code</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="postcode" type="text" id="postcode" placeholder="" readonly >
+                        
+                    </div>
+                    
+                    <label>Registered Office</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="registeredoffice" type="text" id="registeredoffice" placeholder="" readonly >
+                        
+                    </div>
+        </td>
+    <td width="50%" valign="top"><div id="info" style="padding-left:20px">
+    
+     <label>Phone Number</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="phonenumber" type="text" id="phonenumber" placeholder="" readonly >
+                        
+                    </div>
+                    
+                    <label>Phone Number 1</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="phonenumber1" type="text" id="phonenumber1" placeholder="" readonly >
+                        
+                    </div>
+
+                    <label>Mobile Number</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="mobilenumber" type="text" id="mobilenumber" placeholder="" readonly >
+                        
+                    </div>
+                     <label>Mobile Number 1</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="mobilenumber1" type="text" id="mobilenumber1" placeholder="" readonly >
+                        
+                    </div>
+                    
+                    <label>Email Address</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="emailaddress" type="text" id="emailaddress" placeholder="" readonly >
+                        
+                    </div>
+                     <label>Email Address 1</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="emailaddress1" type="text" id="emailaddress1" placeholder="" readonly >
+                        
+                    </div>
+                    
+                     <label>Home Page</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="homepage" type="text" id="homepage" placeholder="" readonly >
+                        
+                    </div>
+                    
+                   
+    </div>             
+    </td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="3" cellpadding="0">
+<tr>
+    <td width="50%">
+        <label>Region</label>
+        <div class="input-control text" data-role="input-control">
+            <input name="RegionName" type="text" id="RegionName" disabled >
+        </div>
+    </td>
+	<td style="padding-left:20px">
+        <label>Sub-County</label>
+        <div class="input-control text" data-role="input-control">
+            <input name="SubCountyName" type="text" id="SubCountyName" disabled >
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <label>Station</label>
+        <div class="input-control text" data-role="input-control">
+            <input name="RegionStationName" type="text" id="RegionStationName" disabled >
+        </div>
+    </td>
+	<td style="padding-left:20px">
+        <label>Physical Location</label>
+        <div class="input-control text" data-role="input-control">
+            <input name="PhysicalLocation" type="text" id="PhysicalLocation" disabled >
+        </div>    
+    </td>
+</tr>
+<tr>
+    <td>
+        <label>Telephone Number</label>
+        <div class="input-control text" data-role="input-control">
+            <input name="TelephoneNumber" type="text" id="TelephoneNumber" disabled >
+        </div>
+    </td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+<div style="margin-top: 20px" align="left">  <br>
+                    <input type="text" id="LicenceApplicationID" />
+					<input name="submit" type="button" id="submit1" value="Previous" onclick="load_applicants()" />
+					<input name="submit" type="button" id="submit2" value="Checklist" onclick="load_checklist()" />
+      		<input name="submit2" type="button" id="submit3" value="Cancel" onclick="load_applicants()" />
+            <div class="place-right"><input name="submit2" type="button" id="submit3" value="Reschedule" onclick="reschedule()" /></div>
+</div>
+
+ </fieldset>
+
+            </form>  
+			

@@ -1,0 +1,30 @@
+<legend>RESCHEDULE AUDIT</legend>
+<form method="post" onsubmit="return false;">
+    <fieldset>              
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center" style="color:#F00"><div id="message"></div></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td width="38%">
+                <label>New Date <span style="color:#F00">*</span></label>    
+				<div class="input-control text" data-role="datepicker" data-effect="slide" data-other-days="1" style="width:200px" >
+					<input type="text" id="NewDate" name="NewDate">
+					<button class="btn-date"></button>
+                </div>
+                <label>Reasons <span style="color:#F00">*</span></label>
+                <div class="input-control textarea full-size">
+                    <textarea name="Reasons" rows="7" id="Reasons" placeholder=""></textarea>
+                </div>
+                 <br>
+                <input name="Button" type="button" id="submit" value="Reschedule" onclick="reschedule_audit(this.form)">
+                <input name="Button" type="button" id="submit" value="Cancel" onclick="reschedule_cancel(this.form)">
+                
+				<div style="margin-top: 20px"></div>
+            </td>
+            <td width="62%" valign="top"><div id="info" style="padding-left:20px"></div></td>
+          </tr>
+        </table>
+    </fieldset>
+</form>      

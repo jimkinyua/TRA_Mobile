@@ -1,0 +1,58 @@
+
+ <div class="tabs-content">
+            <div class="tab-panel" id="tab_support">
+                <div class="tab-panel-group">
+                    <div class="tab-group-content">	
+                     <!--<button class="fluent-big-button" onClick="new_file()" >
+                            <span class="icon-pictures fg-darkBlue"></span>
+                            <span class="button-label fg-darkBlue">Select Document</span>
+                        </button>
+                       <button class="fluent-big-button" onClick="view_photos()" style="background:#AEAEAE; visibility:hidden" >
+                            <span class="icon-clipboard fg-darkBlue"></span>
+                            <span class="button-label fg-darkBlue">View Inspection Images</span>
+                        </button>-->
+                        <button class="fluent-big-button" onClick="takeovarallphoto()">
+                            <span class="icon-camera fg-darkBlue"></span>
+                            <span class="button-label fg-darkBlue">Take Photo</span>
+                        </button>
+                    </div>           
+                </div>                
+            </div>                                                                
+ </div>
+<p align="center" id="message"> </p>
+</br>
+
+<!-- 
+<table class="table striped hovered dataTable" id="dataTables-3" width="100%">
+<thead>
+  <tr >
+    <th class="text-left">DOCUMENT NAME</th>
+    <th class="text-left">FILE</th>
+    <th class="text-center">&nbsp;</th>
+    <th class="text-center">&nbsp;</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</tbody>
+<tfoot>
+  <tr>
+    <th class="text-left">DOCUMENT NAME</th>
+    <th class="text-left">FILE</th>
+    <th class="text-center">&nbsp;</th>
+    <th class="text-center">&nbsp;</th>
+  </tr>
+  </tfoot>
+</table>
+
+ -->
+<br/>
+<input id="submit" align="right" type="button" onclick="load_auditreportprevious()" value="Previous" name="Button"></input>
+<input name="Button" type="button" id="submit" value="Submit Inspection Report" onclick="submit_inspection()">
+<input id="submit" type="button" onclick="load_applicants()" value="Cancel" name="Button"></input>
+<div class="place-right"><input name="submit2" type="button" id="submit3" value="Reschedule" onclick="reschedule()" /></div>

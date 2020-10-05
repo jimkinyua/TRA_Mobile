@@ -1,0 +1,44 @@
+<legend><span id="name"></span></legend>
+    <form method="post">
+                <fieldset>
+              
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center" style="color:#F00"><div id="msg"></div></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="50%">
+
+                    
+                    <label>Due Date</label>
+                    <div class="input-control text" data-role="datepicker" data-effect="slide" id="datepicker">
+                    <!--data-date="2013-11-13" data-other-days="1"-->
+                        <input name="AuditDate" type="text"  readonly="readonly" >
+                        <button type="button" class="btn-date"></button>
+                    </div>
+</td>
+    <td width="50%" valign="top"><div id="info" style="padding-left:20px">
+    
+     <!--<label>Phone Number</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="phonenumber" type="text" id="phonenumber" placeholder="" readonly >
+                        
+                    </div>-->
+                    
+</div>  
+                
+    </td>
+  </tr>
+</table>
+<div style="margin-top: 20px" align="left">  <br>
+                  <!--  <input name="Button" type="button" id="submit" value="Edit" onclick="editApplicantDetails()">
+                    <input name="Button" type="button" id="submit1" value="Save" onclick="updateApplicantDetails()"> -->
+					<input name="Save" type="button" id="Save" value="Save" onclick="save_unscheduled_inspections_edit()" />
+                    <!-- <input name="submit" type="button" id="submit2" value="Next" onclick="load_checklist()" /> -->
+      <input name="Cancel" type="button" id="Cancel" value="Cancel" onclick="load_unscheduled()" />
+</div>
+ </fieldset>
+
+            </form>  
+			
