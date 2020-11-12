@@ -693,7 +693,7 @@ function applicant_details(LicenceApplicationID)
 	// rest = xmlhttp.responseText;
 	// alert(rest)
 
-	 //console.log('userobj', userobj); //return;
+	 console.log('userobj', userobj); //return;
 	 //alert(userobj.aaData[0].No);
 	 
 	 No = userobj.aaData.No;
@@ -704,31 +704,33 @@ function applicant_details(LicenceApplicationID)
 	 City = userobj.aaData[0].City;
 	 PhoneNo = userobj.aaData[0].Telephone;
 	 Mobile = userobj.aaData[0].Mobile;
-	 CountryRegionCode = userobj.aaData[0].RegionID;
+	 SubSystemName = userobj.aaData[0].SubSystemName;
 	 Email = userobj.aaData[0].Email;
 	 Telephone = userobj.aaData[0].Telephone;
 	 LicenceApplicationID = userobj.aaData[0].LicenceApplicationID;	 
 	 RegionName = userobj.aaData[0].RegionName;
-	 PhysicalLocation = userobj.aaData[0].PhysicalLocation;
+	 PhysicalAddress = userobj.aaData[0].PhysicalAddress;
+	 Website = userobj.aaData[0].Website;
+	 PostalCode = userobj.aaData[0].PostalCode;
+
 	
 	 document.getElementById('LicenceApplicationID').value = LicenceApplicationID;
 	 document.getElementById('CustomerName').value = CustomerName;
 	 document.getElementById('CustomerName').style.backgroundColor = '#D8D8D8'
 	 document.getElementById('Address').value = Address;
-	 document.getElementById('Address').style.backgroundColor = '#D8D8D8'
-	 document.getElementById('city').value = City;  
-	 document.getElementById('city').style.backgroundColor = '#D8D8D8'
-	 document.getElementById('countryregioncode').value = CountryRegionCode;
-	 document.getElementById('countryregioncode').style.backgroundColor = '#D8D8D8'
-	 document.getElementById('phonenumber').value = Telephone;
-	 document.getElementById('phonenumber').style.backgroundColor = '#D8D8D8'
+	 document.getElementById('Telephone').value = Telephone;
+	 document.getElementById('Telephone').style.backgroundColor = '#D8D8D8'
 	 document.getElementById('mobilenumber').value = Mobile;
-	 document.getElementById('mobilenumber').style.backgroundColor = '#D8D8D8'
 	 document.getElementById('emailaddress').value = Email;
 	 document.getElementById('emailaddress').style.backgroundColor = '#D8D8D8'	 
-	 document.getElementById('RegionName').value = RegionName;  
-	 document.getElementById('PhysicalLocation').value = PhysicalLocation;
-	 document.getElementById('TelephoneNumber').value = Telephone; 
+	 document.getElementById('SubSystemName').value = SubSystemName;  
+	 document.getElementById('SubSystemName').style.backgroundColor = '#D8D8D8'
+	 document.getElementById('PhysicalAddress').value = PhysicalAddress;
+	 document.getElementById('Website').value = Website; 
+	 document.getElementById('RegisteredOffice').value = PhysicalAddress;
+	 document.getElementById('RegisteredOffice').style.backgroundColor = '#D8D8D8'
+	 document.getElementById('PostalCode').value = PostalCode;
+	 document.getElementById('PostalCode').style.backgroundColor = '#D8D8D8'
 }
 
 
@@ -1026,12 +1028,14 @@ function load_checklist()
 	 LicenceApplicationID=document.getElementById('LicenceApplicationID').value;
 
 	 document.getElementById('content').innerHTML = fetch_page("checklist.html?AuditID="+AuditID+"&UserID="+UserID);
+	//  url=serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID+"&UserID="+UserID;
+	// alert(url);
 	
 	 $(function(){
            $('#dataTables-2').dataTable( {
                    "bProcessing": true,
                    "autoWidth": false,
-                   "sAjaxSource": serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID,						 
+                   "sAjaxSource": serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID+"&UserID="+UserID,						 
                    iDisplayLength: 100                                           
 			  } );
 			  

@@ -1553,10 +1553,11 @@ else if($OptionValue=='applications')
 		
 	$msql = "set dateformat dmy SELECT top 100 sh.ServiceHeaderID AS ApplicationID,sh.ServiceStatusID,ss.ServiceStatusName, s.ServiceName , 
 c.CustomerID, c.CustomerName, sh.SubmissionDate,sh.SetDate,s.ServiceID,ins.InspectionID,ins.InspectionStatusID FROM ServiceHeader AS sh 
-INNER JOIN Services AS s ON sh.ServiceID = s.ServiceID INNER JOIN Customer AS c ON sh.CustomerID = c.CustomerID 
+INNER JOIN Services AS s ON sh.ServiceID = s.ServiceID inner join ServiceCategory sc on sc.ServiceCategoryID = sh.ServiceCategoryID
+ INNER JOIN Customer AS c ON sh.CustomerID = c.CustomerID 
 INNER JOIN ServiceStatus ss ON sh.ServiceStatusID=ss.ServiceStatusID INNER JOIN Inspections ins on 
 ins.ServiceHeaderID=sh.ServiceHeaderID 
-where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID = 0 order by sh.SubmissionDate desc";
+where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID = 0 and sc.ServiceGroupID != 12 order by sh.SubmissionDate desc";
 	// echo $msql;
 
 
@@ -1581,7 +1582,7 @@ where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID =
 		$SetDate1 = '';
 		$d_sql="select SetDate from ServiceHeader where ServiceHeaderID = $ApplicationID";
 		$dres=sqlsrv_query($db,$d_sql);
-		while($row=sqlsrv_fetch_array($res,SQLSRV_FETCH_ASSOC))
+		while($row=sqlsrv_fetch_array($dres,SQLSRV_FETCH_ASSOC))
 		{
 			$SetDate1=$row['SetDate'];
 		}
@@ -1589,8 +1590,8 @@ where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID =
 		$UserID=$CurrentUser;
 		$actions='';
 		$Tarehe = date("Y-m-d");
-
-		if ($Tarehe > $SetDate1){
+		
+		if ($Tarehe == $SetDate1){
 
 		$CustomerName = ' <a href="#" onClick="applicant_details('.$ApplicationID.')">'.$CustomerName.'</a>';
 		}else{
@@ -1610,10 +1611,12 @@ where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID =
 }
 else if($OptionValue=='applicant')
 {
-	$sql = "select c.CustomerID,
-			CustomerName,PostalAddress,PhysicalAddress,Telephone1,PIN,IDNO,Town,Mobile1,Email,rg.RegionID,rg.RegionName 
-			from ServiceHeader sh
-			left join Customer c on c.CustomerID=sh.CustomerID
+	$sql = "select c.CustomerID, CustomerName,Website,
+			PostalAddress,PhysicalAddress,Telephone1,
+			PIN,IDNO,Town,Mobile1,Email,rg.RegionID,rg.RegionName, SubSystemName, PostalCode 
+			from ServiceHeader sh 
+			left join Customer c on c.CustomerID=sh.CustomerID 
+			left join SubSystems sbs on sbs.SubSystemID = c.BusinessZone
 			left join (
 			select fd.ServiceHeaderID,r.SubSystemID RegionID,r.SubSystemName RegionName from
 			(select ServiceHeaderID,[Value] RegionID 
@@ -1621,7 +1624,7 @@ else if($OptionValue=='applicant')
 			left join SubSystems r on r.SubSystemID=fd.RegionID
 			) rg on rg.ServiceHeaderID=sh.ServiceHeaderID
 			where sh.ServiceHeaderID=$param1";
-
+// exit($sql);
 
 	$result = sqlsrv_query($db, $sql);	
 	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
@@ -1631,6 +1634,7 @@ else if($OptionValue=='applicant')
 		$channel[] = array(
 		'LicenceApplicationID'=>$param1,	
 		'No'=>$CustomerID,
+		'Website'=>$Website,
 		'Name'=>$CustomerName,
 		'Address'=>$PostalAddress,
 		'City'=>$Town,
@@ -1639,26 +1643,130 @@ else if($OptionValue=='applicant')
 		'LicenceApplicationID'=>$param1,
 		'RegionID'=>$RegionID,
 		'RegionName'=>$RegionName,
-		'PhysicalLocation'=>$PhysicalAddress,
+		'PhysicalAddress'=>$PhysicalAddress,
 		'Telephone'=>$Telephone1,
-		
+		'SubSystemName'=>$SubSystemName,
+		'PostalCode'=>$PostalCode		
   		);		
 	}  	
 }
 else if($OptionValue=='checklist')
 {
 	$LicenceApplicationID=$param1;
+	$UserID=$CurrentUser;
 
-	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription
-			from ChecklistParameterCategories cat";
-// echo $sql;
+
+	$ServiceGroupID = '';
+	$ServiceID = '';
+
+	$ssql= "set dateformat dmy SELECT sc.ServiceGroupID,s.ServiceID,s.ChecklistTypeID 
+		from ServiceHeader AS sh 
+		INNER JOIN Services AS s ON sh.ServiceID = s.ServiceID
+		inner join ServiceCategory sc on sc.ServiceCategoryID = sh.ServiceCategoryID
+		inner join ServiceGroup sg on sg.ServiceGroupID = sc.ServiceGroupID 
+		INNER JOIN Customer AS c ON sh.CustomerID = c.CustomerID 
+		INNER JOIN ServiceStatus ss ON sh.ServiceStatusID=ss.ServiceStatusID 
+		INNER JOIN Inspections ins on ins.ServiceHeaderID=sh.ServiceHeaderID 
+		where sh.ServiceStatusID=2 
+		and ins.InspectionStatusID = 0 and sh.ServiceHeaderID = $LicenceApplicationID";
+// echo $ssql;
+		$sresult = sqlsrv_query($db, $ssql);
+		while($row=sqlsrv_fetch_array($sresult, SQLSRV_FETCH_ASSOC)){
+
+			$ServiceGroupID = $row['ServiceGroupID'];
+			$ServiceID = $row['ServiceID'];
+			$ChecklistTypeID = $row['ChecklistTypeID'];
+		}
+		// echo $ServiceCategoryID; 
+//set up for classification of town hotels
+if($ServiceGroupID==11){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = $ChecklistTypeID";
+			// echo $sql;
+// echo $LicenceApplicationID;
 	$result = sqlsrv_query($db, $sql);	
 	$i=1;
 	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
 	{
 		extract($row);	
 
-		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID";
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = $ChecklistTypeID";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$testdata = 'omonso';
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+$tr.='<tr>';
+				$td.='<td>
+					<div class="input-control numberTest">
+						testdata '.$testdata.'
+					</div>
+					</td>';
+			$tr.=$td.'</tr>';
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+}else{
+		$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription
+			from ChecklistParameterCategories cat where ChecklistTypeID=$ChecklistTypeID";
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID=$ChecklistTypeID";
 		// echo $sql;
 		$result2 = sqlsrv_query($db, $sql);
 // echo $sql;
@@ -1681,22 +1789,17 @@ else if($OptionValue=='checklist')
 					</div>
 					</td>';
 
-					$td.='<td>
-					<div class="input-control textarea">
-						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
-					</div>
-					</td>';
-// $td.='<td>
-// 					<div class="input-control numberTest">
-// 						<input type="number" id="quantity'.$ParameterID.'" onchange="listen()" name="quantity'.$ParameterID.'_v3" min="1" max="10">
-// 					</div>
-// 					</td>';
+					// $td.='<td>
+					// <div class="input-control textarea">
+					// 	<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					// </div>
+					// </td>';
 
-					$td.='<td>
-					<div class="input-control numberTest">
-						Max score '.$ParameterScore.'
-					</div>
-					</td>';
+					// $td.='<td>
+					// <div class="input-control numberTest">
+					// 	Max score '.$ParameterScore.'
+					// </div>
+					// </td>';
 					
 			$tr.=$td.'</tr>';
 		}
@@ -1721,6 +1824,7 @@ else if($OptionValue=='checklist')
 			'<div>'.$table.'</div>'
 		);
 		$i+=1;	
+	}
 	}  	
 }
 

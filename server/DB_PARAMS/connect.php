@@ -4,7 +4,7 @@
 $myServer = "TRA\SQL2017";
 $myUser = "mobileapp";
 $myPass = 'mobileapp';
-$myDB = "TRA";
+$myDB = "TRANEW";
 
 $params = array();
 $options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
