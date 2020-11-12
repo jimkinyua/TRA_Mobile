@@ -1648,17 +1648,41 @@ else if($OptionValue=='applicant')
 else if($OptionValue=='checklist')
 {
 	$LicenceApplicationID=$param1;
+	$UserID=$CurrentUser;
 
-	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription
-			from ChecklistParameterCategories cat";
-// echo $sql;
+
+	$ServiceCategoryID = '';
+	$ServiceID = '';
+
+	$ssql= "set dateformat dmy SELECT s.ServiceCategoryID,s.ServiceID 
+		from ServiceHeader AS sh 
+		INNER JOIN Services AS s ON sh.ServiceID = s.ServiceID 
+		INNER JOIN Customer AS c ON sh.CustomerID = c.CustomerID 
+		INNER JOIN ServiceStatus ss ON sh.ServiceStatusID=ss.ServiceStatusID 
+		INNER JOIN Inspections ins on ins.ServiceHeaderID=sh.ServiceHeaderID 
+		where sh.ServiceStatusID=2 
+		and ins.InspectionStatusID = 0 and sh.ServiceHeaderID = $LicenceApplicationID";
+// echo $ssql;
+		$sresult = sqlsrv_query($db, $ssql);
+		while($row=sqlsrv_fetch_array($sresult, SQLSRV_FETCH_ASSOC)){
+
+			$ServiceCategoryID = $row['ServiceCategoryID'];
+			$ServiceID = $row['ServiceID'];
+		}
+		// echo $ServiceCategoryID; 
+//set up for classification of town hotels
+if($ServiceCategoryID == 2033 && $ServiceID == 2075){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 2";
+			// echo $sql;
+// echo $LicenceApplicationID;
 	$result = sqlsrv_query($db, $sql);	
 	$i=1;
 	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
 	{
 		extract($row);	
 
-		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID";
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 2";
 		// echo $sql;
 		$result2 = sqlsrv_query($db, $sql);
 // echo $sql;
@@ -1686,11 +1710,6 @@ else if($OptionValue=='checklist')
 						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
 					</div>
 					</td>';
-// $td.='<td>
-// 					<div class="input-control numberTest">
-// 						<input type="number" id="quantity'.$ParameterID.'" onchange="listen()" name="quantity'.$ParameterID.'_v3" min="1" max="10">
-// 					</div>
-// 					</td>';
 
 					$td.='<td>
 					<div class="input-control numberTest">
@@ -1721,6 +1740,502 @@ else if($OptionValue=='checklist')
 			'<div>'.$table.'</div>'
 		);
 		$i+=1;	
+	}
+	//set up for classification of restaurants
+}elseif($ServiceCategoryID == 2033 && $ServiceID == 2073){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 8";
+			// echo $sql;
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 8";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+	//set up for classification of vacation hotels
+}elseif($ServiceCategoryID == 2033 && $ServiceID == 2076){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 3";
+			// echo $sql;
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 3";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+	//set up for the classification of lodges 
+}elseif($ServiceCategoryID == 2033 && $ServiceID == 2078){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 4";
+			// echo $sql;
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 4";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+	//set up for classification of villas
+}elseif($ServiceCategoryID == 2033 && $ServiceID == 2079){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 6";
+			// echo $sql;
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 6";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+	//set up for classification of tented camps
+}elseif($ServiceCategoryID == 2033 && $ServiceID == 2080){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 5";
+			// echo $sql;
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 5";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+	//set up for classification of motels
+}elseif($ServiceCategoryID == 2033 && $ServiceID == 2081){
+	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
+	from ChecklistParameterCategories cat where cat.ChecklistTypeID = 7";
+			// echo $sql;
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID and ChecklistTypeID = 7";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					</div>
+					</td>';
+
+					$td.='<td>
+					<div class="input-control numberTest">
+						Max score '.$ParameterScore.'
+					</div>
+					</td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
+	}else{
+		$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription
+			from ChecklistParameterCategories cat";
+// echo $LicenceApplicationID;
+	$result = sqlsrv_query($db, $sql);	
+	$i=1;
+	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);	
+
+		$sql="select ParameterName ComplianceItem, ParameterScore, ParameterID from ChecklistParameters where ParameterCategoryID=$ParameterCategoryID";
+		// echo $sql;
+		$result2 = sqlsrv_query($db, $sql);
+// echo $sql;
+		$table='<table class="bordered" width="100%"><tbody>';
+		$tr='';
+		while ($cp = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC)) 
+		{
+			extract($cp);
+			$tr.='<tr>';
+			$td='<td>'.$ComplianceItem.'</td>';
+			$td.='<td>
+					<div class="input-control select">
+						<select id="verdict" name="'.$ParameterID.'_v1"><option value="1">Yes</option><option value="0" selected>No</option>
+						</select>
+					</div>
+				</td>';
+			$td.='<td>
+					<div class="input-control textarea">
+						<textarea name="'.$ParameterID.'_v2" id="recommendation"></textarea>
+					</div>
+					</td>';
+
+					// $td.='<td>
+					// <div class="input-control textarea">
+					// 	<textarea name="'.$ParameterID.'_v3" id="quantity" rows="2" cols="5"></textarea>
+					// </div>
+					// </td>';
+
+					// $td.='<td>
+					// <div class="input-control numberTest">
+					// 	Max score '.$ParameterScore.'
+					// </div>
+					// </td>';
+					
+			$tr.=$td.'</tr>';
+		}
+		$table.=$tr.'</tbody></table>';
+
+
+		$CompulsoryText = '';
+		if ($Compulsory == 1)
+		{
+			$CompulsoryText = '<span style="color:#F00">*</span>';
+		}
+
+		$ItemName = "K_".$ParameterID;	
+		$checkedstring = 'checked="checked"';
+		$channel[] = array
+		(
+			'<div>'.$i.'</div>',
+			'<div>'.
+				'<div style="font-weight:bold">'.$ParameterCategoryName.'</div>'.
+				'<div>Parameter ID: '.$ParameterCategoryDescription.'</div>'.						
+			'</div>',
+			'<div>'.$table.'</div>'
+		);
+		$i+=1;	
+	}
 	}  	
 }
 

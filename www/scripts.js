@@ -1026,12 +1026,14 @@ function load_checklist()
 	 LicenceApplicationID=document.getElementById('LicenceApplicationID').value;
 
 	 document.getElementById('content').innerHTML = fetch_page("checklist.html?AuditID="+AuditID+"&UserID="+UserID);
+	//  url=serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID+"&UserID="+UserID;
+	// alert(url);
 	
 	 $(function(){
            $('#dataTables-2').dataTable( {
                    "bProcessing": true,
                    "autoWidth": false,
-                   "sAjaxSource": serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID,						 
+                   "sAjaxSource": serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID+"&UserID="+UserID,						 
                    iDisplayLength: 100                                           
 			  } );
 			  

@@ -1,10 +1,10 @@
 <?php	
 //require_once('config.php');
 
-$myServer = "TRA\SQL2017";
-$myUser = "mobileapp";
-$myPass = 'mobileapp';
-$myDB = "TRA";
+$myServer = "TRA-EDMS\SQLTRA";
+$myUser = "sa";
+$myPass = 'portalman';
+$myDB = "TRANEW";
 
 $params = array();
 $options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
