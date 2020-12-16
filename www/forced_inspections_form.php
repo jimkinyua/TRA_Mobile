@@ -1,12 +1,27 @@
+<?php 
+//require '/server/DB_PARAMS/connect.php';
+// require('/server/DB_PARAMS/connect.php');
+// require_once('utilities.php');
+// require_once('GlobalFunctions.php');
+
+include('../server/DB_PARAMS/connect.php');
+
+// include($_SERVER['DOCUMENT_ROOT'].'/server/DB_PARAMS/connect.php');
+
+
+?>
+
 <div class="fluent-menu" data-role="fluentmenu">
 
     <ul class="tabs-holder">
         <li class="active"><a href="#tab_licence" onClick="return false;">Forced Inspections</a></li>
        <!--  <li class=""><a href="#tab_inspections">Inspections</a></li> -->
+
     </ul>
 
     <div class="tabs-content" style="height: auto; padding: 2rem">
         <div class="tab-panel" id="tab_licence">
+
             <legend><span id="name">Client  Details</span></legend>
     <form method="post">
 
@@ -18,12 +33,12 @@
   </tr>
   <tr>
     <td width="50%">
-
                     
                     <label>Customer Name</label>
                     <div class="input-control text" data-role="input-control">
                         <input name="CustomerName" type="text" id="CustomerName" placeholder="" >
                     </div>
+
 
                    <label>Contact Person</label>
                     <div class="input-control text" data-role="input-control">
@@ -31,10 +46,20 @@
                         
                     </div>
                     
-                    <label>Business Type</label>
+                    <!-- <label>Business Type</label>
                     <div class="input-control text" data-role="input-control">
                         <input name="Type" type="text" id="Type" placeholder="" >
-                    </div>
+                    </div> -->
+
+                      <label>Business Type</label>      
+                      <div class="input-control select">
+                      <select name="Type" id="Type">
+                      <option value="Individual">Individual</option>
+                      <option value="Business">Business</option>              
+                      </select>
+                      </div>
+
+
                     <label>Postal Address</label>
                     <div class="input-control text" data-role="input-control">
                         <input name="PostalAddress" type="text" id="PostalAddress" placeholder="" >
@@ -63,11 +88,13 @@
                         
                     </div>
 
-                                      <label>Role</label>
+
+                  <label>Services</label>
                   <div class="input-control select" data-role="input-control">
                     <select name="ServiceID"  id="ServiceID">
                             <option value="0" selected="selected"></option>
-                                <?php 
+                                <?php
+
                                 $s_sql = "SELECT * FROM Services ORDER BY ServiceID";
                                 
                                 $s_result = sqlsrv_query($db, $s_sql);
@@ -93,6 +120,14 @@
                     </select>
                   
                  </div>
+
+
+                    <label>Permit No(If licensed)</label>
+                    <div class="input-control text" data-role="input-control">
+                        <input name="PermitNo" type="text" id="PermitNo" placeholder="" >
+                        
+                    </div>
+
                     
                   
                    
@@ -139,7 +174,70 @@
                     <div class="input-control text" data-role="input-control">
                         <input name="PIN" type="text" id="PIN" placeholder="" 
                     </div>
+                                   <label>Services Category</label>
+                  <div class="input-control select" data-role="input-control">
+                    <select name="ServiceCategoryID"  id="ServiceCategoryID">
+                            <option value="0" selected="selected"></option>
+                                <?php
 
+                                $s_sql = "SELECT * FROM ServiceCategory ORDER BY ServiceCategoryID";
+                                
+                                $s_result = sqlsrv_query($db, $s_sql);
+                                if ($s_result) 
+                                { //connection succesful 
+                                    while ($row = sqlsrv_fetch_array( $s_result, SQLSRV_FETCH_ASSOC))
+                                    {
+                                        $s_id = $row["ServiceCategoryID"];
+                                        $s_name = $row["CategoryName"];
+                                        if ($ServiceCategoryID==$s_id) 
+                                        {
+                                            $selected = 'selected="selected"';
+                                        } else
+                                        {
+                                            $selected = '';
+                                        }                                               
+                                    ?>
+                                <option value="<?php echo $s_id; ?>" <?php echo $selected; ?>><?php echo $s_name; ?></option>
+                                <?php 
+                                    }
+                                }
+                                ?>
+                    </select>
+                  
+                 </div>
+
+
+                                                    <label>Business Zone(Region)</label>
+                  <div class="input-control select" data-role="input-control">
+                    <select name="RegionID"  id="RegionID">
+                            <option value="0" selected="selected"></option>
+                                <?php
+
+                                $s_sql = "SELECT * FROM Regions ORDER BY RegionID";
+                                
+                                $s_result = sqlsrv_query($db, $s_sql);
+                                if ($s_result) 
+                                { //connection succesful 
+                                    while ($row = sqlsrv_fetch_array( $s_result, SQLSRV_FETCH_ASSOC))
+                                    {
+                                        $s_id = $row["RegionID"];
+                                        $s_name = $row["RegionName"];
+                                        if ($RegionID==$s_id) 
+                                        {
+                                            $selected = 'selected="selected"';
+                                        } else
+                                        {
+                                            $selected = '';
+                                        }                                               
+                                    ?>
+                                <option value="<?php echo $s_id; ?>" <?php echo $selected; ?>><?php echo $s_name; ?></option>
+                                <?php 
+                                    }
+                                }
+                                ?>
+                    </select>
+                  
+                 </div>
                     <input type="hidden" name="Force_inspection" id="Force_inspection" value="1" />
                     
                    
@@ -150,10 +248,6 @@
 
 <div style="margin-top: 20px" align="left">  <br>
 
-            <!-- <input name="submit" type="button" id="submit2" value="Previous" onclick="load_applicants()" />
-            <input name="submit" type="button" id="submit2" value="Next" onclick="load_distribution_points()" />
-            <input name="submit2" type="button" id="submit3" value="Cancel" onclick="load_applicants()" /> -->
-
             <div class="place-right"><input name="submit2" type="button" id="submit3" value="Submit" onclick="submitForcedInspections(this.form)" ></div>
 </div>
 
@@ -162,53 +256,6 @@
             </form>  
                       
         </div>       
-
-
-
-<!--         
-        <div class="tab-panel" id="tab_inspections">
-            <legend><span id="name">Inspections Details</span></legend>  
-
-            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td align="center" style="color:#F00"><div id="msg"></div></td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-        <td width="50%"> 
-            <label>LicenceNumber</label>
-            <div class="input-control text" data-role="input-control">
-                <input name="LicenceNumber" type="text" id="LicenceNumber" placeholder="" readonly >                
-            </div> 
-            <label>InspectionsDone</label>
-            <div class="input-control text" data-role="input-control">
-                <input name="InspectionsDone" type="text" id="InspectionsDone" placeholder="" readonly >                
-            </div> 
-            <label>PreviousFindings</label>
-            <div class="input-control text" data-role="input-control">
-                <input name="PreviousFindings" type="text" id="PreviousFindings" placeholder="" readonly >                
-            </div> 
-        </td>
-        <td width="50%" valign="top"><div id="info" style="padding-left:20px">    
-            <label>Expiry Date</label>
-                <div class="input-control text" data-role="input-control">
-                    <input name="ExpiryDate" type="text" id="ExpiryDate" placeholder="" readonly >                    
-                </div> 
-            </div>   
-            <label>PreviousInspector</label>
-                <div class="input-control text" data-role="input-control">
-                    <input name="PreviousInspector" type="text" id="PreviousInspector" placeholder="" readonly >                    
-                </div> 
-            </div>    
-            <label>NextQuarterlyInspection</label>
-                <div class="input-control text" data-role="input-control">
-                    <input name="NextQuarterlyInspection" type="text" id="NextQuarterlyInspection" placeholder="" readonly >                   
-                </div> 
-            </div>             
-        </td>
-  </tr>
-</table>
-
-        </div>    -->                                                              
+                                                            
     </div>  
 </div> 

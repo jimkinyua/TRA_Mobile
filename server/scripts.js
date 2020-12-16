@@ -97,7 +97,9 @@ function check_all()
     }	
 		
 }
-
+function test_loading(){
+console.log('hello');
+}
 function loadtextpage(url,destination,loader,field, showtoolbar)
 { 
 	dest = destination;

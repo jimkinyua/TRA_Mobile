@@ -70,6 +70,7 @@ function login(Uname, Passwd)
 	
 	//alert('hi');
 	url = serverurl+"login.php?uname="+Uname+"&passwd="+Passwd;
+
 	//alert(url);
 	userobj = fetch_data(url);		
 	//alert(userobj.jData[0].result);
@@ -415,9 +416,9 @@ function fetch_data(url)
 	xmlhttp.open("GET",url,false);
 	xmlhttp.send();
 	rest = xmlhttp.responseText;
-	//alert(url+' '+rest);
+	// alert(url+' '+rest);
 	var obj = JSON.parse(rest);
-	
+	// alert(Obj);
 	return obj;	
 }
 
@@ -477,6 +478,7 @@ function GetXmlHttpObject()
 
 function load_applicants()
 {
+
 	 UserID = localStorage.getItem("UserID");
 	 RegionStationsID = localStorage.getItem("RegionStationsID");
 	 
@@ -498,6 +500,35 @@ function load_applicants()
 	   
 }
 
+function test_loading(){
+console.log('hello');
+}
+
+function load_applicants2()
+{
+	 UserID = localStorage.getItem("UserID");
+	 RegionStationsID = localStorage.getItem("RegionStationsID");
+
+	 // console.log('hello again');
+
+	document.getElementById('content').innerHTML = fetch_page("list_of_forced_inspections.html?i=1&UserID="+UserID+'&RegionStationsID='+RegionStationsID);
+	url=serverurl+"listpages_data.php?OptionValue=applications2&UserID="+UserID+'&RegionStationsID='+RegionStationsID;
+	
+	//alert(url);
+		
+      $(function()
+      {
+           $('#dataTables-2').dataTable( {
+           "bProcessing": true,
+           "autoWidth": false,
+           "sAjaxSource": url,
+			iDisplayLength: 100
+						
+                                           
+      } );
+       }); 
+	   
+}
 //For Distribution Points
 function load_distribution_points()
 {
@@ -684,10 +715,10 @@ function applicant_details(LicenceApplicationID)
 
 	//  xmlhttp=GetXmlHttpObject()
 	// if (xmlhttp==null)
- // 	{
- // 		alert ("Browser does not support HTTP Request")
- // 		return
- // 	}
+    // 	{
+    // 		alert ("Browser does not support HTTP Request")
+    // 		return
+    // 	}
 	// xmlhttp.open("GET",url,false);
 	// xmlhttp.send();
 	// rest = xmlhttp.responseText;
@@ -749,6 +780,7 @@ function licencee_profile(AuditID, LicenceApplicationID, LicenceType)
 	document.getElementById('Uname').innerHTML = UserName;
 	document.getElementById('content').innerHTML = fetch_page("licencee_profile.html?i=1"); 
 	url = serverurl +"licencee_profile.php?AuditID="+AuditID;
+
    
    //alert(LicenceApplicationID);	 
 	// AuditID   = localStorage.getItem("AuditID");	 
@@ -858,6 +890,21 @@ function licencee_profile(AuditID, LicenceApplicationID, LicenceType)
 	 document.getElementById('PreviousInspector').value = PreviousInspector;
 	 document.getElementById('PreviousFindings').value = PreviousFindings; 
 	 document.getElementById('NextQuarterlyInspection').value = NextQuarterlyInspection; 
+
+}
+
+
+function add_force_inspected_client()
+{
+
+	//localStorage.setItem("AuditID", AuditID);
+	//localStorage.setItem("LicenceType", LicenceType);
+	//localStorage.setItem("LicenceApplicationID", LicenceApplicationID);
+
+	  document.getElementById('Uname').innerHTML = UserName;
+
+	  document.getElementById('content').innerHTML = fetch_page("forced_inspections_form.php?i=1");
+
 
 }
 
@@ -982,6 +1029,7 @@ function reschedule_audit(form)
 	UserID = localStorage.getItem("UserID");
     LicenceType = localStorage.getItem("LicenceType");
 	AuditID = localStorage.getItem("AuditID");
+
 	if (NewDate != '' && Reasons != '')
 	{
 		   url = serverurl+"reschedule.php?NewDate="+NewDate+'&Reasons='+Reasons+'&AuditID='+AuditID+'&UserID='+UserID;
@@ -999,12 +1047,71 @@ function reschedule_audit(form)
 			   document.getElementById('message').innerHTML = result;
 		   }
 	}
+
 	else
 	{
 		message = 'Please enter all required Values';
 		
 		document.getElementById('message').innerHTML = message;
 	}
+	
+}
+
+function submitForcedInspections(form)
+{
+	// alert(form);
+	  CustomerName=form.CustomerName.value;
+	  // alert(CustomerName);
+	   ContactPerson=form.ContactPerson.value;
+	   Type=form.Type.value;
+	   PostalAddress=form.PostalAddress.value;
+	   PhysicalAddress=form.PhysicalAddress.value;
+	   PlotNo=form.PlotNo.value;
+	   PostalCode=form.PostalCode.value;
+	   Town=form.Town.value;
+	   Telephone1=form.Telephone1.value;
+	   Telephone2=form.Telephone2.value;
+	   Mobile1=form.Mobile1.value;
+	   Mobile2=form.Mobile2.value;
+	   Email=form.Email.value;
+	   website=form.website.value;
+ 	   PIN=form.PIN.value;
+	   Force_inspection=form.Force_inspection.value;
+	   ServiceID=form.ServiceID.value;
+	   ServiceCategoryID=form.ServiceCategoryID.value;
+	   PermitNo=form.PermitNo.value;
+	   RegionID=form.RegionID.value;
+	   
+
+	    UserID = localStorage.getItem("UserID");
+
+	     // RegionStationsID = localStorage.getItem("RegionStationsID");
+
+
+	 url = serverurl+"listpages_data.php?OptionValue=SaveForcedInspections&param1="+CustomerName +"&param2="+ContactPerson +"&UserID="+UserID +"&param3="+Type+ "&param4="+PostalAddress +"&param5="+PhysicalAddress +"&param6="+PlotNo +"&param7="+PostalCode +"&param8="+Town +"&param9="+Telephone1 +"&param10="+Telephone2 +"&param11="+Mobile1+"&param12="+Mobile2 +"&param13="+Email +"&param14="+website +"&param15="+PIN +"&param16="+Force_inspection+"&param17="+ServiceID+"&param18="+ServiceCategoryID+"&param19="+PermitNo+"&param20="+RegionID;
+     //url = serverurl+"listpages_data.php?OptionValue=SaveReport&UserID="+UserID +"&param1="+LicenceApplicationID +"&param2=" +verdict+"&param3="+comment;
+     // alert(url);
+
+	userobj = fetch_data(url); 
+	  // console.log(userobj);
+	Result = userobj.aaData[0].Result;
+	if(Result == 1)
+	{
+		load_applicants2();	
+	}
+	else
+	{
+		load_summary();
+	}
+
+	// }
+
+	// else
+	// {
+	// 	message = 'Please enter all required Values';
+		
+	// 	//document.getElementById('message').innerHTML = message;
+	// }
 	
 }
 
@@ -1030,13 +1137,12 @@ function load_checklist()
 	// alert(url);
 	
 	 $(function(){
-           $('#dataTables-2').dataTable( {
+           $('#dataTables-2').dataTable({
                    "bProcessing": true,
                    "autoWidth": false,
                    "sAjaxSource": serverurl+"listpages_data.php?OptionValue=checklist&param1="+LicenceApplicationID+"&UserID="+UserID,						 
                    iDisplayLength: 100                                           
 			  } );
-			  
 			 
        });	   
 }
@@ -1178,6 +1284,7 @@ function load_auditreport22()
 
 function save_report()
 {
+
 	UserID = localStorage.getItem("UserID");
  	AuditID = localStorage.getItem("AuditID");
 	LicenceApplicationID = localStorage.getItem("LicenceApplicationID");
@@ -1199,6 +1306,9 @@ function save_report()
 	}
 
 }
+
+
+
 function save_checklist()
 {
 	var valuestring='';

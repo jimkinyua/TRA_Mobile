@@ -16,6 +16,29 @@ if (isset($_REQUEST['UserID'])) { $UserID = $_REQUEST['UserID']; }
 if (isset($_REQUEST['param1'])) { $param1 = $_REQUEST['param1']; }
 if (isset($_REQUEST['param2'])) { $param2 = $_REQUEST['param2']; }
 if (isset($_REQUEST['param3'])) { $param3 = $_REQUEST['param3']; }
+
+//Added  by moses to cater for forced inpection values/parameters
+if (isset($_REQUEST['param4'])) { $param4 = $_REQUEST['param4']; }
+if (isset($_REQUEST['param5'])) { $param5 = $_REQUEST['param5']; }
+if (isset($_REQUEST['param6'])) { $param6 = $_REQUEST['param6']; }
+if (isset($_REQUEST['param7'])) { $param7 = $_REQUEST['param7']; }
+if (isset($_REQUEST['param8'])) { $param8 = $_REQUEST['param8']; }
+if (isset($_REQUEST['param9'])) { $param9 = $_REQUEST['param9']; }
+if (isset($_REQUEST['param10'])) { $param10 = $_REQUEST['param10']; }
+if (isset($_REQUEST['paaram11'])) { $paaram11 = $_REQUEST['paaram11']; }
+if (isset($_REQUEST['param12'])) { $param12 = $_REQUEST['param12']; } 
+if (isset($_REQUEST['param13'])) { $param13 = $_REQUEST['param13']; } 
+if (isset($_REQUEST['param14'])) { $param14 = $_REQUEST['param14']; } 
+if (isset($_REQUEST['param15'])) { $param15 = $_REQUEST['param15']; } 
+if (isset($_REQUEST['param16'])) { $param16 = $_REQUEST['param16']; } 
+if (isset($_REQUEST['param17'])) { $param17 = $_REQUEST['param17']; } 
+if (isset($_REQUEST['param18'])) { $param18 = $_REQUEST['param18']; } 
+if (isset($_REQUEST['param19'])) { $param19 = $_REQUEST['param19']; } 
+if (isset($_REQUEST['param20'])) { $param20 = $_REQUEST['param20']; } 
+
+//ends here men 
+
+
 if (isset($_REQUEST['exParam'])){ $exParam =$_REQUEST['exParam'];}else{	$exParam='None';}
 
 if ($OptionValue == 'session')
@@ -40,6 +63,7 @@ else if ($OptionValue == 'users')
 	join UserStatus us on u.UserStatusID=us.UserStatusID 
 	left join UserRoles ur on ur.UserID=ag.AgentID 
 	left join RoleCenters rc on ur.RoleCenterID=rc.RoleCenterID";
+
 	// echo $sql;
 	// exit;
 
@@ -1453,7 +1477,9 @@ else if($OptionValue=='applications')
 	$Subcounties='';
 	$locationcondition='';
 	$role='None';
+
 	//check whether the person is a clerk or Officer
+
 	$sql="select iif (exists(select 1 from ClerkWard where UserID=$UserID and status=1),'Clerk',
 			iif (exists(select 1 from ApproverSetup where UserID=$UserID and status=1),'Officer','None')) Role";
 
@@ -1483,7 +1509,8 @@ else if($OptionValue=='applications')
 
 		$locationcondition=" and (select value from fnFormData(sh.ServiceHeaderID) WHERE FormColumnID=11204) in $wards and sh.ServiceStatusID<=3";
 
-	}else if ($role=='Officer'){
+	}
+	else if ($role=='Officer'){
 		$sql="select SubCountyID From ApproverSetup where UserID=$UserID and Status=1";
 
 		$result=sqlsrv_query($db,$sql);
@@ -1500,7 +1527,8 @@ else if($OptionValue=='applications')
 		$subcounties.=')';
 
 		$locationcondition=" and (select value from fnFormData(sh.ServiceHeaderID) WHERE FormColumnID=11203) in $subcounties and sh.ServiceStatusID>3 and sh.ServiceStatusID<7";
-	}else{
+	}
+	else{
 		$locationcondition=" and 1=1"; //just to make sure that a person who is neither a cler nor officer cannot view anything
 	}
 
@@ -1557,8 +1585,9 @@ INNER JOIN Services AS s ON sh.ServiceID = s.ServiceID inner join ServiceCategor
  INNER JOIN Customer AS c ON sh.CustomerID = c.CustomerID 
 INNER JOIN ServiceStatus ss ON sh.ServiceStatusID=ss.ServiceStatusID INNER JOIN Inspections ins on 
 ins.ServiceHeaderID=sh.ServiceHeaderID 
-where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID = 0 and sc.ServiceGroupID != 12 order by sh.SubmissionDate desc";
-	// echo $msql;
+where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID = 0 and sc.ServiceGroupID != 12 and 
+c.Force_inspection!=1 order by sh.SubmissionDate desc";
+	
 
 
 	//".$filter.$locationcondition."
@@ -1592,11 +1621,188 @@ where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID =
 		$Tarehe = date("Y-m-d");
 		
 		if ($Tarehe == $SetDate1){
-
 		$CustomerName = ' <a href="#" onClick="applicant_details('.$ApplicationID.')">'.$CustomerName.'</a>';
-		}else{
+		}
+		else{
 			$CustomerName = $CustomerName;
 		}
+
+		$channel[] = array(			
+				$ApplicationID,
+				$CustomerName,				
+				$ServiceName,
+				$SubmissionDate,
+				$SetDate,
+				$RegionName,
+				$actions	
+		);			
+	}  	
+	
+}
+
+else if($OptionValue=='applications2')
+{
+	$fromDate=date('d/m/Y');
+	$toDate=date('d/m/Y');
+	$filter=" and DATEDIFF(day,sh.CreatedDate,getdate())<4 ";
+	$role_center=1;
+	$ServiceHeaderID='';
+
+	$UserID=$CurrentUser;
+	$wards='';
+	$Subcounties='';
+	$locationcondition='';
+	$role='None';
+
+	//check whether the person is a clerk or Officer
+
+	$sql="select iif (exists(select 1 from ClerkWard where UserID=$UserID and status=1),'Clerk',
+			iif (exists(select 1 from ApproverSetup where UserID=$UserID and status=1),'Officer','None')) Role";
+
+	$result=sqlsrv_query($db,$sql);
+	while ($row=sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) 
+	{
+		$role=$row['Role'];
+	}
+
+	if($role=='Clerk')
+	{
+		$sql="select WardID From ClerkWard where UserID=$UserID and Status=1";
+
+		$result=sqlsrv_query($db,$sql);
+		$i=0;
+
+		while($row=sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)){
+			if ($i==0){
+				$wards='('.$row['WardID'];
+			}else{
+				$wards.=','.$row['WardID'];
+			}
+			$i+=1;
+		}
+
+		$wards.=')';
+
+		$locationcondition=" and (select value from fnFormData(sh.ServiceHeaderID) WHERE FormColumnID=11204) in $wards and sh.ServiceStatusID<=3";
+
+	}
+	else if ($role=='Officer'){
+		$sql="select SubCountyID From ApproverSetup where UserID=$UserID and Status=1";
+
+		$result=sqlsrv_query($db,$sql);
+		$i=0;
+		while($row=sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)){
+			if ($i==0){
+				$subcounties='('.$row['SubCountyID'];
+			}else{
+				$subcounties.=','.$row['SubCountyID'];
+			}
+			$i+=1;
+		}
+
+		$subcounties.=')';
+
+		$locationcondition=" and (select value from fnFormData(sh.ServiceHeaderID) WHERE FormColumnID=11203) in $subcounties and sh.ServiceStatusID>3 and sh.ServiceStatusID<7";
+	}
+	else{
+		$locationcondition=" and 1=1"; //just to make sure that a person who is neither a cler nor officer cannot view anything
+	}
+
+	if (strlen($exParam)>0)
+	{
+		$details=explode(':',$exParam);
+		
+		if(strlen($exParam)>2)
+		{
+			$str3=explode('=',$details[0]);
+			$role_center=1;//$str3[1];
+
+			if (strpos($exParam,'fromDate')==true)
+			{
+				$str3=explode('=',$details[1]);
+				$fromDate=$str3[1];
+			}else
+			{
+				$fromDate='date';//date('d/m/Y');
+			}
+
+			if (strpos($exParam,'toDate')==true)
+			{
+				$str3=explode('=',$details[2]);
+				$toDate=$str3[1];
+			}else
+			{
+				$toDate=date('d/m/Y');
+			}
+
+			if (strpos($exParam,'ServiceHeaderID')==true)
+			{
+				$str3=explode('=',$details[3]);
+				$ServiceHeaderID=$str3[1];
+			}
+			
+			if(!$ServiceHeaderID=='')
+			{
+				$filter=" and sh.ServiceHeaderID='$ServiceHeaderID'";
+			}else{
+				$filter=" and convert(date,sh.CreatedDate)>='$fromDate' and convert(date,sh.CreatedDate)<='$toDate'";
+			}
+			
+		}else{
+			$role_center=1;//$exParam;
+			$filter=" and DATEDIFF(day,sh.CreatedDate,getdate())<5 ";
+		}
+	}
+		
+		
+$msql = "set dateformat dmy SELECT top 100 sh.ServiceHeaderID AS ApplicationID,sh.ServiceStatusID,ss.ServiceStatusName, s.ServiceName , 
+c.CustomerID, c.CustomerName, sh.SubmissionDate,sh.SetDate,s.ServiceID,ins.InspectionID,ins.InspectionStatusID FROM ServiceHeader AS sh 
+INNER JOIN Services AS s ON sh.ServiceID = s.ServiceID inner join ServiceCategory sc on sc.ServiceCategoryID = sh.ServiceCategoryID
+ INNER JOIN Customer AS c ON sh.CustomerID = c.CustomerID 
+INNER JOIN ServiceStatus ss ON sh.ServiceStatusID=ss.ServiceStatusID INNER JOIN Inspections ins on 
+ins.ServiceHeaderID=sh.ServiceHeaderID 
+where sh.ServiceStatusID=2 and ins.UserID = $UserID and ins.InspectionStatusID = 0 and sc.ServiceGroupID != 12 and 
+c.Force_inspection=1 order by sh.SubmissionDate desc";
+
+	// echo $msql;exit;
+
+
+	//".$filter.$locationcondition."
+
+	$result = sqlsrv_query($db, $msql);	
+	while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) 
+	{
+		extract($row);
+
+		$sql="select fn.Value, w.RegionName Name
+			from fnFormData($ApplicationID) fn 
+			join Regions w on fn.Value=w.RegionID
+			where fn.formcolumnid=12237";
+		$res=sqlsrv_query($db,$sql);
+		while($row=sqlsrv_fetch_array($res,SQLSRV_FETCH_ASSOC))
+		{
+			$RegionName=$row['Name'];
+		}
+		
+		$SetDate1 = '';
+		$d_sql="select SetDate from ServiceHeader where ServiceHeaderID = $ApplicationID";
+		$dres=sqlsrv_query($db,$d_sql);
+		while($row=sqlsrv_fetch_array($dres,SQLSRV_FETCH_ASSOC))
+		{
+			$SetDate1=$row['SetDate'];
+		}
+
+		$UserID=$CurrentUser;
+		$actions='';
+		$Tarehe = date("Y-m-d");
+		
+		if ($Tarehe == $SetDate1){
+		$CustomerName = ' <a href="#" onClick="applicant_details('.$ApplicationID.')">'.$CustomerName.'</a>';
+		}
+		else{
+			$CustomerName = $CustomerName;
+		}
+
 		$channel[] = array(			
 				$ApplicationID,
 				$CustomerName,				
@@ -1624,7 +1830,7 @@ else if($OptionValue=='applicant')
 			left join SubSystems r on r.SubSystemID=fd.RegionID
 			) rg on rg.ServiceHeaderID=sh.ServiceHeaderID
 			where sh.ServiceHeaderID=$param1";
-// exit($sql);
+      // exit($sql);
 
 	$result = sqlsrv_query($db, $sql);	
 	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
@@ -1646,7 +1852,7 @@ else if($OptionValue=='applicant')
 		'PhysicalAddress'=>$PhysicalAddress,
 		'Telephone'=>$Telephone1,
 		'SubSystemName'=>$SubSystemName,
-		'PostalCode'=>$PostalCode		
+		'PostalCode'=>$PostalCode
   		);		
 	}  	
 }
@@ -1683,7 +1889,7 @@ if($ServiceGroupID==11){
 	$sql = "select cat.ParameterCategoryID, cat.ParameterCategoryName,cat.ParameterCategoryDescription 
 	from ChecklistParameterCategories cat where cat.ChecklistTypeID = $ChecklistTypeID";
 			// echo $sql;
-// echo $LicenceApplicationID;
+   // echo $LicenceApplicationID;
 	$result = sqlsrv_query($db, $sql);	
 	$i=1;
 	while ($row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) 
@@ -1837,6 +2043,132 @@ else if($OptionValue=='SaveReport')
 	$sql="update Inspections set InspectionStatusID='$verdict',UserComment='$comments' where ServiceHeaderID=$LicenceApplicationID and UserID=$UserID";
 	// echo $sql;exit;
 	$results=sqlsrv_query($db,$sql);
+
+	if($results){
+		$channel[] = array(			
+				'Result'=>'1'
+		);
+	}
+	
+}
+else if($OptionValue=='SaveForcedInspections')
+{
+	$valueCustomerName=$param1;
+	  // exit($valueCustomerName);
+    $valueContactPerson=$param2;
+    $valueType=$param3;
+    $valuePostalAddress=$param4;
+    $valuePhysicalAddress=$param5;
+    $valuePlotNo=$param6;
+    $valuePostalCode=$param7;
+    $valueTown=$param8;
+    $valueTelephone1=$param9;
+    $valueTelephone2=$param10;
+    $valueMobile1=$param11;
+    $valueMobile2=$param12;
+    $valueEmail=$param13;
+    $valuewebsite=$param14;
+    $valuePIN=$param15;
+    $valueForce_inspection=$param16;
+    $valueServiceID=$param17;
+    $valueServiceCategoryID=$param18;
+    $valuePermitNo=$param19;
+    $valueRegionID=$param20;
+
+    $valueUserID=$UserID;	
+
+
+$sql="insert into  Customer(CustomerName,ContactPerson,Type,PostalAddress,PhysicalAddress,PlotNo,PostalCode,Town,Telephone1,Telephone2,Mobile1,Mobile2,Email,website,PIN,Force_inspection,BusinessZone) values('$valueCustomerName','$valueContactPerson','$valueType','$valuePostalAddress','$valuePhysicalAddress','$valuePlotNo','$valuePostalCode','$valueTown',
+'$valueTelephone1','$valueTelephone2','$valueMobile1','$valueMobile2','$valueEmail','$valuewebsite','$valuePIN','$valueForce_inspection','$valueRegionID')";
+
+	// $sql="update Inspections set InspectionStatusID='$verdict',UserComment='$comments' where ServiceHeaderID=$LicenceApplicationID and UserID=$UserID";
+	 //echo $sql;exit;
+
+
+                               
+                              	
+
+
+	$results=sqlsrv_query($db,$sql);
+
+//---------------service header table-----------------------------------//
+	$selectSql="select top 1 CustomerID from Customer  order by CustomerID desc";
+
+    $results_inserted = sqlsrv_query($db, $selectSql);
+                        if ($results_inserted) 
+                        { //connection succesful 
+                            while ($row = sqlsrv_fetch_array($results_inserted, SQLSRV_FETCH_ASSOC))
+                            {
+                                $CustomerID = $row["CustomerID"];
+                            }
+                        }
+                        // echo $CustomerID;exit;
+                        $date=date("Y-m-d");
+                        $submissionDate=date("Y-m-d h:i:s");
+
+   $sql_servicerHeader="insert into ServiceHeader(CustomerID,ServiceID,ServiceStatusID,CreatedBy,ServiceCategoryId,SetDate,SubmissionDate,PermitNo) values('$CustomerID',$valueServiceID,2,'$UserID',$valueServiceCategoryID,'$date','$submissionDate','$valuePermitNo')";
+//echo $sql_servicerHeader;exit;
+ $results_serviceHeader = sqlsrv_query($db, $sql_servicerHeader);
+
+ //---------------End of service header table insert -----------------------------------//
+
+
+//---------------------Begin Inspections table-------------------------------------//
+
+ 	$sql7="select top 1 ServiceHeaderID from ServiceHeader  order by ServiceHeaderID desc";
+    
+    $executeSql = sqlsrv_query($db, $sql7);
+                        if ($executeSql) 
+                        { //connection succesful 
+                            while ($row = sqlsrv_fetch_array($executeSql, SQLSRV_FETCH_ASSOC))
+                            {
+                                $ServiceHeaderID = $row["ServiceHeaderID"];
+                            }
+                        }
+                        // echo $CustomerID;exit;
+
+   $insertInspections="insert into Inspections(ServiceHeaderID,UserID) values('$ServiceHeaderID','$UserID')";
+
+   $excuteinspections = sqlsrv_query($db, $insertInspections);
+
+   //---------------------End  Inspections table insert-------------------------------------//
+
+
+
+   //---------------------Begin Forced Penalties table-------------------------------------//
+
+ 	$sqlForced="select top 1 InspectionID from Inspections  order by InspectionID desc";
+
+    $selectSqlForced="select top 1 CustomerID from Customer  order by CustomerID desc";
+
+    $executeForcedSql1 = sqlsrv_query($db, $sqlForced);
+                        if ($executeForcedSql1) 
+                        { //connection succesful 
+                            while ($row = sqlsrv_fetch_array($executeForcedSql1, SQLSRV_FETCH_ASSOC))
+                            {
+                                $InspectionIDForced = $row["InspectionID"];
+                            }
+                        }
+
+                         $executeForcedSql2 = sqlsrv_query($db, $selectSqlForced);
+                        if ($executeForcedSql2) 
+                        { //connection succesful 
+                            while ($row = sqlsrv_fetch_array($executeForcedSql2, SQLSRV_FETCH_ASSOC))
+                            {
+                                $CustomerIDForced = $row["CustomerID"];
+                            }
+                        }
+
+
+                        // echo $CustomerID;exit;
+
+   $insertInspections="insert into ForcedPenalties(CompanyID,Amount,InspectionID) values('$CustomerIDForced',400000,'$InspectionIDForced')";
+   
+   $excuteinspections = sqlsrv_query($db, $insertInspections);
+
+   //---------------------End  Inspections table insert-------------------------------------//
+
+
 
 	if($results){
 		$channel[] = array(			
@@ -4230,7 +4562,8 @@ else if($OptionValue=='LandFarms')
 		);
 		
 	}  	
-}else if($OptionValue=='Estates')
+}
+else if($OptionValue=='Estates')
 {
 	$sql = "select EstateID,EstateName from Estates";
 	$result = sqlsrv_query($db, $sql);	
@@ -4268,7 +4601,8 @@ else if($OptionValue=='Houses')
 		);
 		
 	}  	
-}else if($OptionValue=='WaiverPeriods')
+}
+else if($OptionValue=='WaiverPeriods')
 {
 	$sql = "select PeriodID,StartDate,EndDate,MemoNo,WaiverPercentage,Status,iif(Status=1,'Active','Closed') Status from waiverperiods";
 	$result = sqlsrv_query($db, $sql);	
@@ -4356,7 +4690,8 @@ else if($OptionValue=='ApprovalRequests')
 		);			
 	}  	
 	//print_r($channel);
-}else if ($OptionValue == 'Assets')
+}
+else if ($OptionValue == 'Assets')
 {
 	$sql = "select a.AssetID, isnull(a.RegistrationNumber,'N/A')RegistrationNumber,a.AssetName,a.DepreciationRate,a.AcquisitionDate,a.AcquisitionCost,[at].AssetTypeName
 			from Assets a 
@@ -4385,7 +4720,8 @@ else if($OptionValue=='ApprovalRequests')
 					,$DeleteBtn
 					);
 	}
-}else if ($OptionValue == 'MatatuRoutes')
+}
+else if ($OptionValue == 'MatatuRoutes')
 {
 	$sql = "select *
 			from MatatuRoutes";
@@ -4407,7 +4743,8 @@ else if($OptionValue=='ApprovalRequests')
 					,$DeleteBtn
 					);
 	}
-}else if ($OptionValue == 'BusParks')
+}
+else if ($OptionValue == 'BusParks')
 {
 	$sql = "select *
 			from BusParks";
@@ -4429,7 +4766,8 @@ else if($OptionValue=='ApprovalRequests')
 					,$DeleteBtn
 					);
 	}
-}else if($OptionValue=='RouteCharges')
+}
+else if($OptionValue=='RouteCharges')
 {
 	$sql = "select rc.*,r.RouteName 
 			from RouteCharges rc join MatatuRoutes r on rc.RouteID=r.RouteID

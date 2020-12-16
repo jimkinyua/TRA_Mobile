@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4b2ec2a0-faf4-449b-9858-f3eb1ac99b5a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/www/forced_inspections_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/list_of_forced_inspections.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/newscripts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/DB_PARAMS/connect.php" beforeDir="false" afterPath="$PROJECT_DIR$/server/DB_PARAMS/connect.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/listpages_data.php" beforeDir="false" afterPath="$PROJECT_DIR$/server/listpages_data.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/scripts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/licencee_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/licencee_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/list_of_applicants.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/list_of_applicants.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/menu2.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/menu2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="HTML4 File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kY2lVulUQJb6yXQFHw0Q79N9TV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML4 File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4b2ec2a0-faf4-449b-9858-f3eb1ac99b5a" name="Default Changelist" comment="" />
+      <created>1605863357392</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605863357392</updated>
+      <workItem from="1605863359198" duration="26793000" />
+      <workItem from="1606313834983" duration="2646000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="184" y="8" key="SettingsEditor" timestamp="1606313908997">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1606313908997" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1605864889909">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1605864889909" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1606222538321">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1606222538321" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/server/listpages_data.php</url>
+          <line>3659</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/server/listpages_data.php</url>
+          <line>632</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/server/listpages_data.php</url>
+          <line>4417</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/www/newscripts.js</url>
+          <line>1278</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/www/newscripts.js</url>
+          <line>674</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

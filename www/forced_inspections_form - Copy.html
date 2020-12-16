@@ -7,6 +7,7 @@
 
     <div class="tabs-content" style="height: auto; padding: 2rem">
         <div class="tab-panel" id="tab_licence">
+
             <legend><span id="name">Client  Details</span></legend>
     <form method="post">
 
@@ -18,7 +19,6 @@
   </tr>
   <tr>
     <td width="50%">
-
                     
                     <label>Customer Name</label>
                     <div class="input-control text" data-role="input-control">
@@ -63,21 +63,32 @@
                         
                     </div>
 
-                                      <label>Role</label>
+<!--                                       <label>Role</label>
                   <div class="input-control select" data-role="input-control">
                     <select name="ServiceID"  id="ServiceID">
                             <option value="0" selected="selected"></option>
+
+                                <option value="<?php echo $s_id; ?>" <?php echo $selected; ?>><?php echo $s_name; ?></option>
+                              
+                    </select>
+                  
+                 </div> -->
+
+                  <label>Role</label>
+                  <div class="input-control select" data-role="input-control">
+                    <select name="RoleCenterID"  id="RoleCenterID">
+                            <option value="0" selected="selected"></option>
                                 <?php 
-                                $s_sql = "SELECT * FROM Services ORDER BY ServiceID";
+                                $s_sql = "SELECT * FROM RoleCenters ORDER BY RoleCenterID";
                                 
                                 $s_result = sqlsrv_query($db, $s_sql);
                                 if ($s_result) 
                                 { //connection succesful 
                                     while ($row = sqlsrv_fetch_array( $s_result, SQLSRV_FETCH_ASSOC))
                                     {
-                                        $s_id = $row["ServiceID"];
-                                        $s_name = $row["ServiceName"];
-                                        if ($ServiceID==$s_id) 
+                                        $s_id = $row["RoleCenterID"];
+                                        $s_name = $row["RoleCenterName"];
+                                        if ($RoleCenterID==$s_id) 
                                         {
                                             $selected = 'selected="selected"';
                                         } else
